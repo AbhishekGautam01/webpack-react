@@ -1,4 +1,5 @@
 const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 var HTMLWebpackPlugin = require('html-webpack-plugin');
 var HTMLWebpackConfigPlugin = new HTMLWebpackPlugin({
@@ -28,6 +29,13 @@ module.exports = function (_env, argv) {
             },
           },
         },
+        {
+          test: /\.css$/,
+          use: [
+            isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+            'css-loader',
+          ],
+        },
       ],
     },
     resolve: {
@@ -38,6 +46,13 @@ module.exports = function (_env, argv) {
       filename: 'assets/js/[name].[contenthash:8].js', // pattern to specify generated file names
       publicPath: '/', // The Path to root directory where all files will be deployed.
     },
-    plugins: [HTMLWebpackConfigPlugin].filter(Boolean),
+    plugins: [
+      isProduction &&
+        new MiniCssExtractPlugin({
+          filename: 'assets/css/[name].[contenthash:8].css',
+          chunkFilename: 'assets/css/[name].[contenthash:8].chunk.css',
+        }),
+      HTMLWebpackConfigPlugin,
+    ].filter(Boolean),
   };
 };
