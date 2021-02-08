@@ -1,5 +1,6 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const webpack = require('webpack');
 
 var HTMLWebpackPlugin = require('html-webpack-plugin');
 var HTMLWebpackConfigPlugin = new HTMLWebpackPlugin({
@@ -69,6 +70,11 @@ module.exports = function (_env, argv) {
           filename: 'assets/css/[name].[contenthash:8].css',
           chunkFilename: 'assets/css/[name].[contenthash:8].chunk.css',
         }),
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(
+          isProduction ? 'production' : 'development'
+        ),
+      }),
       HTMLWebpackConfigPlugin,
     ].filter(Boolean),
   };
