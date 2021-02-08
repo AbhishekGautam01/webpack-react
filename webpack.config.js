@@ -2,9 +2,9 @@ const path = require('path');
 
 var HTMLWebpackPlugin = require('html-webpack-plugin');
 var HTMLWebpackConfigPlugin = new HTMLWebpackPlugin({
-  template: __dirname + 'app/index.html',
+  template: path.resolve(__dirname, 'public/index.html'),
   filename: 'index.html',
-  inject: 'head',
+  inject: true,
 });
 
 module.exports = function (_env, argv) {
@@ -15,29 +15,29 @@ module.exports = function (_env, argv) {
     devtool: isDevelopment && 'cheap-module-source-map', // Enable source Map generation in development mode
     entry: './src/index.js', // The Main Entry Point
     module: {
-            rules: [
-              {
-                test: /\.jsx?$/,
-                exclude: /node_modules/,
-                use: {
-                  loader: "babel-loader",
-                  options: {
-                    cacheDirectory: true,
-                    cacheCompression: false,
-                    envName: isProduction ? "production" : "development"
-                  }
-                }
-              }
-            ]
+      rules: [
+        {
+          test: /\.jsx?$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: true,
+              cacheCompression: false,
+              envName: isProduction ? 'production' : 'development',
+            },
           },
-          resolve: {
-            extensions: [".js", ".jsx"]
-           }
-         };
+        },
+      ],
+    },
+    resolve: {
+      extensions: ['.js', '.jsx'],
+    },
     output: {
       path: path.resolve(__dirname, 'dist'), // root dir to store output files
       filename: 'assets/js/[name].[contenthash:8].js', // pattern to specify generated file names
       publicPath: '/', // The Path to root directory where all files will be deployed.
     },
+    plugins: [HTMLWebpackConfigPlugin].filter(Boolean),
   };
 };
