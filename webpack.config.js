@@ -54,6 +54,18 @@ module.exports = function (_env, argv) {
             name: 'static/media/[name].[hash:8].[ext]',
           },
         },
+        {
+          test: /\.module.css$/,
+          use: [
+            isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+              },
+            },
+          ],
+        },
       ],
     },
     resolve: {
