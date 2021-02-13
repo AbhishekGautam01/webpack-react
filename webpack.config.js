@@ -1,7 +1,7 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
-
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 var HTMLWebpackPlugin = require('html-webpack-plugin');
 var HTMLWebpackConfigPlugin = new HTMLWebpackPlugin({
   template: path.resolve(__dirname, 'public/index.html'),
@@ -15,11 +15,11 @@ module.exports = function (_env, argv) {
 
   return {
     devtool: isDevelopment && 'cheap-module-source-map', // Enable source Map generation in development mode
-    entry: './src/index.js', // The Main Entry Point
+    entry: './src/index.tsx', // The Main Entry Point
     module: {
       rules: [
         {
-          test: /\.jsx?$/,
+          test: /\.(js|jsx|ts|tsx)?$/,
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
@@ -88,7 +88,7 @@ module.exports = function (_env, argv) {
       ],
     },
     resolve: {
-      extensions: ['.js', '.jsx'],
+      extensions: ['.js', '.jsx', '.ts', '.tsx'],
     },
     output: {
       path: path.resolve(__dirname, 'dist'), // root dir to store output files
@@ -107,6 +107,7 @@ module.exports = function (_env, argv) {
         ),
       }),
       HTMLWebpackConfigPlugin,
+      new ForkTsCheckerWebpackPlugin({ async: false }),
     ].filter(Boolean),
   };
 };
